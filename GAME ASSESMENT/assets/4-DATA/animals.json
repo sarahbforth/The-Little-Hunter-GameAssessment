@@ -1,0 +1,164 @@
+{
+    "frames": [{
+        "name": "sheep1-00",
+        "position": {
+          "x": 0,
+          "y": 224,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep1-01",
+        "position": {
+          "x": 32,
+          "y": 224,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep1-02",
+        "position": {
+          "x": 64,
+          "y": 224,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep1-03",
+        "position": {
+          "x": 96,
+          "y": 224,
+          "w": 32,
+          "h": 32
+        }
+    },
+    {
+        "name": "sheep2-00",
+        "position": {
+          "x": 0,
+          "y": 160,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep2-01",
+        "position": {
+          "x": 32,
+          "y": 160,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep2-02",
+        "position": {
+          "x": 64,
+          "y": 160,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "sheep2-03",
+        "position": {
+          "x": 96,
+          "y": 160,
+          "w": 32,
+          "h": 32
+        }
+    },
+    {
+        "name": "cowIdle-00",
+        "position": {
+          "x": 0,
+          "y": 448,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowIdle-01",
+        "position": {
+          "x": 64,
+          "y": 448,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowIdle-02",
+        "position": {
+          "x": 128,
+          "y": 448,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowIdle-03",
+        "position": {
+          "x": 192,
+          "y": 448,
+          "w": 64,
+          "h": 64
+        }
+    },
+    {
+        "name": "cowWalk-00",
+        "position": {
+          "x": 0,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowWalk-01",
+        "position": {
+          "x": 64,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+    },
+    {
+        "name": "cowWalk-02",
+        "position": {
+          "x": 128,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowWalk-03",
+        "position": {
+          "x": 192,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowWalk-04",
+        "position": {
+          "x": 256,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+      },
+      {
+        "name": "cowWalk-05",
+        "position": {
+          "x": 320,
+          "y": 192,
+          "w": 64,
+          "h": 64
+        }
+    }]
+}

@@ -1,0 +1,38 @@
+{
+    "frames": [{
+        "name": "spriteFront-00",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "spriteFront-01",
+        "position": {
+          "x": 32,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "spriteFront-02",
+        "position": {
+          "x": 64,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        }
+      },
+      {
+        "name": "spriteFront-03",
+        "position": {
+          "x": 96,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        }
+    }]
+}

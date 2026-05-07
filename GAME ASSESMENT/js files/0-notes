@@ -1,0 +1,102 @@
+LOG
+------
+
+Structure plan: Title - Cutscene - Explore & Collect - Village & NPCs - Boss - Final Scene
+
+System Requirements: Scene managers/Player system/World system/Interaction system/Dialogue/Combat/UI system/Game state machine
+
+------
+
+Intro cutscene: Introduce character and explain goal
+                Must have background image, show dialogue box, press key to advance
+Explore scene: Player movement/animations and basic exploration of a location to collect loot
+                Must have movement controls, object collisions (loot and walls), money count increase, exit unlocks/triggers after goal is reached.
+Village scene: NPC interactions for storyline progress with potential item trades
+                Must have NPC interction control, dialogue controls, quest triggers.
+Boss Arena/Combat: The final boss for questline (only combat scene in game)
+                Must have one boss fully animated, battle UI systems, attack/damage mechanics, trigger win/lose scene.
+
+-----
+
+Potential classes - Player/NPC/Enemy/DialogueBoxes/Items
+
+Keyboard input for movement/collision triggers/scene changes
+
+Algorithms - collision detection/enemy attack and movement/dialogue progressions
+
+-----
+
+Multilpe files for structure? External libraries if needed?  
+- assets
+- json data (sprite animations)
+- sketch (preload)
+- global variables?
+- character info
+- scene info
+- game state managers?
+- game ui info?
+
+//REMINDER must alter html for extra files//
+
+-----
+
+Potential Class Hierarchy
+
+(Use superclasses for easy expansion?)
+Game characters:  ENTITY > CHARACTER > PLAYER > NPC > ENEMY
+Items: ITEM > LOOT
+Game Scenes: BASE SCENE > TITLE SCENE > CUTSCENE > EXPLORE > HUB/VILLAGE > BATTLE > END SCENE
+Game Managers: MAIN MANAGER > SCENE MANAGER
+
+-----
+
+Buiding a scene manager - must have one active scene at a time, store scene information, relative methods (eg. enter.display)
+
+Custom function ideas = addScene / changeScene / display / keyPressed or mousePressed
+
+Game manager to hold info and possible replay runs = have multiple properties to check game progress.
+- activeQuest / questComplete / gameOver / gameWim / save run numbers for replays?
+
+-----
+
+Building scene classes: Base super class (each scene will have the same structure, occational differences in properties)
+
+Custom function ideas = enterScene / exitScene / display / keyPressed or mousePressed (use scene manager to change scenes?)
+
+-----
+
+Implement everything in sketch and test.
+
+Added drawSceneLabel custom function to build skeleton and check the managers and key handlers work (basic text and labels on screen) - encountered a bug, just a typo.
+
+-----
+
+Building character classes: Using same logic as the scene class, one entity super class with basic properties and methods then expand from there.
+
+Player properties: canvas position and size / name / health / movement and speed / canvas constraints.
+
+Use basic rect() for visibility - keyIsDown() for smooth movement - enter in setup() - add display method to the scenes' display.
+
+- player moves smoothly, no bugs.
+
+-----
+
+Testing loot collection in the explore scene:
+
+Add money property to the player to keep track / create a function for it to add an amount.
+
+Collision will be a big part of the game- create a generic collision function in a seperate file?
+
+//AI USED FOR CONFIRMATION//
+
+Item class: super class method is working - ITEM > LOOT (change in propeties)
+
+- added a display method & collect function to add value to player.
+
+- added a loot array to the explore scene to hold the loot objects and display
+
+- added a player check allLootCollected - player can now only leave once all the objects are found.
+
+-----
+
+Player animation sprite sheet and json file -  taken from my own work 

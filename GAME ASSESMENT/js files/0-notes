@@ -75,7 +75,7 @@ Building character classes: Using same logic as the scene class, one entity supe
 
 Player properties: canvas position and size / name / health / movement and speed / canvas constraints.
 
-Use basic rect() for visibility - keyIsDown() for smooth movement - enter in setup() - add display method to the scenes' display.
+- used basic rect() for visibility - keyIsDown() for smooth movement - enter in setup() - add display method to the scenes' display.
 
 - player moves smoothly, no bugs.
 
@@ -99,4 +99,27 @@ Item class: super class method is working - ITEM > LOOT (change in propeties)
 
 -----
 
-Player animation sprite sheet and json file -  taken from my own work 
+Player animation sprite sheet and json file -  taken from my own work (Week 7 - Practical 1) json template taken from same practical example.
+
+- load assets in preload
+
+- added new properties to player class = speed / animations array / frames
+
+Animation methods in player class: loadAnimationFrames (for loop to iterate through the frame data and save in correct arrays)
+
+- added display methods using new sprite sheet info
+
+- changed some global variables to player specific properties
+
+//AI USED FOR ANIMATION HELP//
+
+"let index = floor(this.frame) % animation.length;"
+- "...standard formula for looping through a sequence of frames in an animation"
+- "...ensures that an animation can run indefinitely"
+- "...allows you to control animation speed independent of frame rate"
+
+- added direction property / used translate as learned from PDM1 assessment to change animation direction
+
+-----
+
+Research into fade transitions between scenes

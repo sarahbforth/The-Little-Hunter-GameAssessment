@@ -123,3 +123,206 @@ Animation methods in player class: loadAnimationFrames (for loop to iterate thro
 -----
 
 Research into fade transitions between scenes
+
+W7_L2_FancyLevels
+
+Transition system within scene manager? > fade out - switch scene - fade back in
+
+Need variables to hold phases and scene change logic
+
+- forceSceneChange and updateFade experiment - required a lot of changes and multiple errors (calling funtions in the wrong order/wrong place) but worked eventually
+
+-----
+
+New player sprite animation frames hand drawn and uploaded into assets.
+
+- bug! can't push all frames into the same array, the program gets confused.
+
+- created seperate animation arrays for "front", "side", "back" - build the arrays using the for loop structure in setup()
+Track movement using player properties and keyIsDown functions.
+
+-----
+
+Dialogue box experiements
+
+W7_L2_DialogueBoxTypewriter
+
+Build class in systems as it is gamewide?
+- built in UI file
+
+- added text wrapping, nextLine functions and reset
+
+Building dialogue box system into cutscenes - add to constructor?
+
+- built an array of dialogue lines into the constructor and initiated in setup()
+
+- added isFinishedLine helper (if line is still typing, space key completes the line instantly, or moves to next line)
+implement in handleKeyPressed
+
+- bug! dialogue starts during fade transition, need fade to complete before the dialogue.
+
+-----
+
+Environment creation for explore scene
+
+W7_L1_Environment
+
+Create an environment class and have custom functions for each tile.
+
+//AI research for building a location with a tilemap and json file//
+
+Requirements - a tilemap renderer, map layout array (2D), collision tiles, loot positions
+
+Experimenting with class building and methods similar to frame animation for loop.
+
+New syntax learned "let w = drawW ?? tile.w;" = "Use drawW if it exists, otherwise use the tile's normal width"
+
+- bugs! misspelled commands, undefined functions - is this the best method..?
+
+Pause for refelction - i'm getting a little overwhelmed with how to set out locations and levels. Do i use the sprite sheet to build it manually? do i photoshop a background for the environment - but then will the boundaries for the player be harder to program? we also learned how to do a centred camera with locked areas which would be a nice touch but i'm just unsure whats going to work better here...
+
+- process change, manually built the explore scene using external assets in Adobe Illustrator, will implement it in the correct scene and centre the camera over the player. 
+
+Save cameraX/Y as globals and draw the background relative to the world.
+
+- if player moves right, camera mves right / if player moves down, camera moves down, player must appear centred.
+"CameraX = player.x - width/2;"
+
+- lock camera inside the environment, use canvas size and image size to contrain the movements (updateCamera)
+
+- update animations and loot images using new camera variables
+
+- additional imagery for details (manually work out coordinates of gem spawn points)
+
+-----
+
+Obstacles within an environment
+
+Location maps are complex, is it better to build boundaries using multiple different rectangles?
+
+- manually worked out central abstacle coordinates, build them as collision rectangles.
+
+- create new helper to go along with rectCollision
+
+- movePlayerWithCollisions created > idea = 
+
+- bug! animations have stopped working, will need to find a fix
+- bug! camera has stopped centralising the player
+
+-----
+
+Built an exit zone to complete the level, added a helper method and a level condition (all loot must be collected and player must return to the exit zone)
+
+-----
+
+Hub scene creation - same methods as the explore scene (thank you for classes!)
+
+(Image built in Adobe Illustrator, implemented with the same method as before with boundaries - no bugs)
+
+-----
+
+NPC animation trials
+
+Gathered external assets of sprite sheets and created seperate json files for all frame data using the same template as before.
+
+Class created using similar methods as the player(update, animation, display etc)
+
+- added globals, preloaded assets and files, extracted frames using same for loop method to fill the arrays
+
+- bug! lots of framing issues with the animations and positioning
+
+- added a draw offset so the draw placement is seperate to the animation frames
+
+- learned "frame.name.startsWith" dot notation - helpful for filling seperate animation arrays
+
+- successfully added multiple NPCs within the location
+
+-----
+
+Adding NPC interaction and dialogue
+
+NPC properties now include an array of dialogue lines as a property
+
+Must have - measure active state of dialogue / proximity check for player+NPC / keyPressed to activate
+
+Stop player movement when in dialogue?
+
+- no bugs, dialogue class allowed the build to be seamless once all other properties were definied
+
+Extra feature - once player has spoken to the blacksmith, force scene and story progression?
+
+- added condition using specifiic dialogue id and scene manager to add new cutscene
+
+-----
+
+Explore scene details
+
+Map is empty and needs some kind of npc to fit the brief (static enemies / random creature to give instructions?)
+
+- found external asset for static enemies, json file and sprite sheets loaded with the same method as before
+
+- added an Enemy class with similar properties to npc to control animations and draw functions, also will have a damage function
+
+As soon as there is collision detected, the player loses health every frame and dies immediately...
+
+- added new properties to player - lastHitTime and hitCooldown as a buffer
+
+- learned new function "millis()" = keeps track of how long the sketch has been running in milliseconds (p5.js reference website) helps measure time without counting the frames the sketch is running
+
+//AI used to help with building functions using new properties//
+
+- created new slime instances in the correct scene and used rect collision to register hit and take damage
+
+- bug! using the update function is helpful but i keep forgetting to add the new game features in the scenes
+
+- bug! player was taking damage too far away from the enemy - adjusted properties to fix it after resizing the sprite
+
+-----
+
+Taking damage from the enemy is printing in the console log but there is no feedback for the user.
+
+Maybe add a flash to the player animation to indicate damage?
+
+- added a hurtTimer property to the player so the effect only lasts for a certain amount of frames
+
+Experimented with tint() to the frames (red/white/black colourings) - not super effective the colour is too subtle and blends with the sprite itself. Can I flicker the animation somehow?
+
+Initial tests playing with frame count did nothing - //AI used for explanation and debugging//
+- "let shouldDraw = true" / "shouldDraw = frameCount % 4 < 2"
+- Explanation = initial experiments were checking conditions without storing or using the results.
+
+-----
+
+The hub/village has too much negative space, re-drew the map to add an animal pen and external animation frames found.
+
+- animation arrays created, json files loaded with the same template and implemented in setup()
+
+- created a basic class (similar to enemy to handle properties and methods) for a static animal, will expand to moving animal
+
+//AI used for some explanation on how to get the program to choose movement randomly//
+- "state machines = setState and pickNewState using random to pick direction and timings"
+
+- bug! animations were placed off map by accident
+
+- bug! more framing issues and movement range was set too small and sprite needed resizing
+
+- json file was incorrect, now fixed
+
+-----
+
+Adding a new cutscene
+
+- bug! background image was stuck to one specific image, changed a property in the class to take a new image every time
+
+-----
+
+- more details added to each location (more npcs, animations, dialogue, collisions)
+
+-----
+
+Final level - boss fight
+
+One side-facing/platformer style level is allowed as I have followed the brief for all previous levels - easier to focus on combat mechanics rather than location and movement.
+
+Level style - one fixed background image, fixed camera no scrolling, set ground level (no obstacles or platforms)
+

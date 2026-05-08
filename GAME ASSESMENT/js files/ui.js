@@ -72,10 +72,10 @@ class DialogueBox {
 
 class GameUI {
     constructor() {
-        this.panelX = 20;
-    this.panelY = 20;
-    this.panelW = 220;
-    this.panelH = 120;
+     this.panelX = 20;
+     this.panelY = 20;
+     this.panelW = 220;
+     this.panelH = 120;
   }
 
   drawPlayerPanel(player) {

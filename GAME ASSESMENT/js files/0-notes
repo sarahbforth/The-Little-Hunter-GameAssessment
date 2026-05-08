@@ -324,5 +324,123 @@ Final level - boss fight
 
 One side-facing/platformer style level is allowed as I have followed the brief for all previous levels - easier to focus on combat mechanics rather than location and movement.
 
-Level style - one fixed background image, fixed camera no scrolling, set ground level (no obstacles or platforms)
+Ideal level style - one fixed background image, fixed camera no scrolling, set ground level (no obstacles or platforms)
 
+-----
+
+Building the battle scene class
+
+- using standard scene base but added propety of set ground level for player and boss positions
+
+- created placeholder characters using rect() to measure the scene
+
+My original player class uses properties and animation styles that i wont need for this level - do i make a new one?
+
+Must have: side-view arena, jump physics?, attacks, health, damages, correct animations
+
+- created new battle player class to include new properties eg. speed, gravity and jump strength (will research more later), directions, attack state, cooldowns, hit timers, hurt timers
+
+//AI used to explain how to implement jumping physics//
+- "use vx/vy to measure the velocity of left/right & up/down - save as a variable for easier control"
+- "vy can control vertical movement = jumping = negative value / falling = positive value"
+
+When using these variables and then adding with a gravity variable, when a key is pressed the jump will start upwards, the upwards speed then slows down and the player falls back down
+
+- new sprite data added to json files using existing sprite sheet, for loop in setup() to fill new animation arrays
+
+- no bugs, animation workds perfectly when handled with key pressed.
+
+-----
+
+Creating a boss class
+
+Can extend character - must have: speed, damage, attack state, direction, health, cool downs, hit timers
+
+Use similar methods to player, must move independently within the contraints of the canvas and use cooldowns to work out timings
+
+- built getAttackBox and takeDamage with visuals (rect()) to check attack timings and range
+
+- learned abs() = "it turns a number into its distance from zero, ignoring whether its positive or negative"
+
+Can i implement this to work out the boss distance from player and get the boss to move?
+
+- added boss sprite sheet and json files (strange frame layout on the sheet, took forever), new frames to player json, same method to fill animation arrays.
+
+- bug! boss sprite allignment with hit box and atatck box is way off, lots of adjustments needed
+
+- bug! issue with code priority, attack state is ending too quickly and not resetting frames
+
+- updated battle scene logic to initaite combat system using custom functions from the class, using animations depending on state
+
+- bug! death animations work but the scene changes before the animatin finishes, added conditions so the deaths only trigger once / combat only initiates whilst both characters are alive / wait for death animtions to finish before changing scenes
+
+- bug! undefined frames - typo!
+
+- bug! didn't update the frames for the death animation so it never progressed
+
+- bug! boss alignment once again, adjustments made
+
+Fight mechanics tested, the fight unbalanced is totally unwinable by the player...
+
+Possible fixes: increase player damage / adjust attack box positions / increase boss cooldown
+
+-----
+
+Additional intro cutscene & Winner/Game over cutscenes
+
+New cutscenes made in Adobe Illustrator and endgame scene change depending on fight conditions
+
+- bug! initialisation structure was wrong in setup()
+
+- bug! text allignment issue, adjustments made
+
+-----
+
+Back to fight mechanics
+
+Change in style - adjusted hit boxes for a much closer fit to the sprite to allow close combat / lowered boss attack boxes and range so they can be avoided correctly / player attack box changed to more AOE style to allow attacks from above
+
+- bug! boss alignment issues again!
+
+- printed registered hits and health stats to console log to check the program is working, fight feels more baanced.
+
+- bug! the boss changes direction mid attack making it impossible to dodge - need to lock attack direction once its decided
+
+No user feedback when damage is taken - need to use the same frame flashing as before
+
+-----
+
+Final details
+
+Explore scene - hole must be dangerous, player respawns in the entry and takes damage
+
+- added a respawn method and collision check with holeZone (similar to exitZone method)
+
+- frame flicker effect added
+
+-----
+
+Building a game UI system for player stats
+
+Must have: player health bar, gems collected, weapon (yes/no depending on storyline) / later boss health bar
+
+Format similar to dialog box for style
+
+Build a reusable gameUI class?
+
+- added weapon property to game manager
+
+- built a class to draw a panel using rect() (extra paramenters for rounded corners)
+
+//AI used for information on how to build a moving health bar//
+- "text(`${player.health} / ${player.maxHealth}`, x + 165, y + 54);" etc.
+
+- boss panel method using the same style
+
+- display the UI in respective scenes
+
+- bug! UI was not anchored to the screen similar to the player - was being drawn inside the camera translated block - moved to draw after pop()
+
+-----
+
+- removed all debugging methods and drawings, final tests

@@ -444,3 +444,12 @@ Build a reusable gameUI class?
 -----
 
 - removed all debugging methods and drawings, final tests
+
+-----
+
+Areas of improvement / expansion
+
+Replay capabilities (game gets harder, more weapon functions and unlockable attacks)
+NPC interaction changes (conversations and trading)
+GameUI (useable shop, inventory system, player buffs, menu)
+Side quests and storyline progressions

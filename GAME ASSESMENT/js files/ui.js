@@ -1,3 +1,8 @@
+/**
+ * Class to handle display and progression of box
+ * 
+ * Line by line progression / typewriter effect
+ */
 class DialogueBox {
     dialogue;
     index;
@@ -5,6 +10,10 @@ class DialogueBox {
     charIndex;
     speed;
 
+    /**
+     * Create box using Array of lines
+     * @param {Array} dialogue - lines to display
+     */
     constructor(dialogue) {
         this.dialogue = dialogue;
         this.index = 0;
@@ -13,11 +22,17 @@ class DialogueBox {
         this.speed = 1;
     }
 
+    /**
+     * Display method for box and visible text
+     * Increase CharIndex over time for typewriter
+     * @returns 
+     */
     draw () {
         if(this.outOfLines || this.dialogue.length === 0) return;
         
         let currentLine = this.dialogue[this.index];
         
+        //dont start text if transitioning
         if (!sceneManager.isTransitioning && this.charIndex < currentLine.length){
             this.charIndex += this.speed;
         }
@@ -40,6 +55,9 @@ class DialogueBox {
         pop();
     }
 
+    /**
+     * Moves to next line / reset type effect
+     */
     nextLine() {
         this.index++;
         this.charIndex = 0;
@@ -49,12 +67,19 @@ class DialogueBox {
         }
     }
 
+    /**
+     * Reset for new dialogue
+     * @param {Array} dialogue - new lines
+     */
     reset(dialogue) {
         this.dialogue = dialogue;
         this.index = 0;
         this.outOfLines = false;
     }
 
+    /**
+     * Skippable text
+     */
     finishLine() {
         if (this.outOfLines) return;
 
@@ -70,7 +95,17 @@ class DialogueBox {
   }
 }
 
+/**
+ * Game UI panels
+ * 
+ * Display player status / health / boss states
+ * 
+ * Kept with same style as dialogue
+ */
 class GameUI {
+    /**
+     * New panel pos and size
+     */
     constructor() {
      this.panelX = 20;
      this.panelY = 20;
@@ -78,6 +113,10 @@ class GameUI {
      this.panelH = 120;
   }
 
+  /**
+   * Draw in top left corner
+   * @param {Character} player - target
+   */
   drawPlayerPanel(player) {
     let x = this.panelX;
     let y = this.panelY;
@@ -128,6 +167,10 @@ class GameUI {
     pop();
   }
 
+  /**
+   * Draw boss panel in top right
+   * @param {*} boss 
+   */
   drawBossPanel(boss) {
     let w = 220;
     let h = 70;

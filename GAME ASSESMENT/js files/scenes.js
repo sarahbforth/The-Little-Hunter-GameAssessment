@@ -1,24 +1,57 @@
+/**
+ * Base scene class
+ * 
+ * Shared structure for behaviour / lifecysle / helpers
+ */
 class BaseScene {
+  /**
+   * @param {string} name - scene name
+   */
   constructor(name) {
     this.name = name;
   }
 
+  /**
+   * call to activate scene
+   */
   enter() {
     console.log(`Entering scene: ${this.name}`);
   }
 
+  /**
+   * update frames - empty for override
+   */
   update() {}
 
+  /**
+   * display method - empty for override
+   */
   display() {}
 
+  /**
+   * deactivate scene
+   */
   exit() {
     console.log(`Exiting scene: ${this.name}`);
   }
 
+  /**
+   * keyboard output for scene
+   * 
+   * @param {string} key - key pressed
+   */
   handleKeyPressed(key) {}
 
+  /**
+   * mouse output for scene
+   */
   handleMousePressed() {}
 
+  /**
+   * Title/subtitle method for scenes - used in development
+   * @param {string} title - title
+   * @param {string} subtitle - optional subtitle
+   */
   drawSceneLabel(title, subtitle = "") {
     fill(255);
     textAlign(CENTER, CENTER);
@@ -29,6 +62,10 @@ class BaseScene {
     text(subtitle, width / 2, height / 2 + 10);
   }
 
+  /**
+   * Display player instructions
+   * @param {string} textValue - instruction text
+   */
   drawInstruction(textValue) {
     fill(255,255,0);
     textAlign(CENTER,CENTER);
@@ -37,17 +74,29 @@ class BaseScene {
   }
   }
 
-
+/**
+ * Title scene shown at start
+ */
 class TitleScene extends BaseScene {
+  /**
+   * Passes name to base scene
+   */
   constructor() {
     super("title");
   }
 
+  /**
+   * Display back ground and text
+   */
   display() {
     background(20, 30, 60);
     this.drawSceneLabel("THE LITTLE HUNTER", "Press ENTER to start");
   }
 
+  /**
+   * Game start = press enter
+   * @param {string} key - key pressed
+   */
   handleKeyPressed(key) {
     if (keyCode === ENTER) {
       sceneManager.changeScene("cutscene1");
@@ -55,7 +104,19 @@ class TitleScene extends BaseScene {
   }
 }
 
+/**
+ * Narrative cutscenes between gameplay
+ * 
+ * Display background image / dialogue boxes / transitions
+ */
 class CutsceneScene extends BaseScene {
+  /**
+   * @param {string} name - cutscene name
+   * @param {string} titleText - title
+   * @param {Array} dialogueLines - lines of dialogue
+   * @param {string} nextSceneName - next scene to load
+   * @param {p5.Image} backgroundImage - display image
+   */
   constructor(name, titleText, dialogueLines, nextSceneName, backgroundImage) {
     super(name);
     this.titleText = titleText;
@@ -64,10 +125,16 @@ class CutsceneScene extends BaseScene {
     this.backgroundImage = backgroundImage;
   }
 
+  /**
+   * Set to active / create dialogue box
+   */
   enter() {
     this.dialogueBox = new DialogueBox(this.dialogueLines);
   }
 
+  /**
+   * Display method for image and dialogue
+   */
   display() {
     background(0);
     if (this.backgroundImage) {
@@ -79,6 +146,10 @@ class CutsceneScene extends BaseScene {
     }
   }
 
+  /**
+   * Advance dialogue
+   * @param {string} key - key pressed
+   */
   handleKeyPressed(key) {
     if (key === " ") {
       if (!this.dialogueBox.outOfLines) {
@@ -92,8 +163,15 @@ class CutsceneScene extends BaseScene {
   }
 }
 
-
+/**
+ * Explore scene for location 1
+ * 
+ * top-down movement / scrolling map / loot collection / hazards / enemy damage / level progression
+ */
 class ExploreScene extends BaseScene {
+  /**
+   * Create scene and initialise map / obstacles / respawn
+   */
   constructor() {
     super("location1");
     this.lootItems = [];
@@ -105,9 +183,14 @@ class ExploreScene extends BaseScene {
     this.respawnFading = false;
   }
 
+  /**
+   * Activate scene
+   * 
+   * Spawn player / place loot / create enemies / define obstacles / interaction zones
+   */
   enter() {
 
-    player.x = 450;
+    player.x = 450; //start position
     player.y = 140;
 
     this.lootItems = [
@@ -127,6 +210,7 @@ class ExploreScene extends BaseScene {
       new Enemy(1750, 615, "slime2", 10, 10, slimeAnimation2)
     ]
 
+    //Object rectangles for collision helper
     this.obstacles = [
       { x: 435, y: 350, w: 325, h: 465 },
       { x: 1350, y: 360, w: 330, h: 465 },
@@ -152,6 +236,9 @@ class ExploreScene extends BaseScene {
     };
   }
 
+  /**
+   * Update camera to follow player
+   */
   updateCamera() {
     cameraX = player.x - width / 2;
     cameraY = player.y - height / 2;
@@ -160,23 +247,32 @@ class ExploreScene extends BaseScene {
     cameraY = constrain(cameraY, 0, this.worldHeight - height);
   }
 
+  /**
+   * Update frames
+   * 
+   * Handles player movement (smooth) / flicker / loot / exit progression / transition / respawn / enemy contact
+   */
   update() {
     this.movePlayerWithCollisions();
 
+    //flicker
     if (player.hurtTimer > 0) {
       player.hurtTimer--;
     }
 
+    //loot collection
     for(let loot of this.lootItems) {
       if (!loot.collected && rectCollision(player,loot)) {
         loot.collect(player);
       }
     }
 
+    //progression condition
     if(this.allLootCollected() && this.playerAtExit()) {
       sceneManager.changeScene("hub");
     }
 
+    //respawn
     if (rectCollision (player, this.holeZone)) {
       this.respawnPlayer();
     }
@@ -192,6 +288,7 @@ class ExploreScene extends BaseScene {
 
     this.updateCamera();
 
+    //enemy contact and damage
     for (let enemy of this.slime) {
       enemy.update();
       if (rectCollision(player, enemy) && player.canBeHit()) {
@@ -201,6 +298,9 @@ class ExploreScene extends BaseScene {
     }
   }
 
+  /**
+   * Player movement with collision checks - can slide not get stuck
+   */
   movePlayerWithCollisions() {
     let dx = 0;
     let dy = 0;
@@ -229,6 +329,7 @@ class ExploreScene extends BaseScene {
 
     let moved = false;
 
+    //horizontal test
     let nextXRect = {
       x: player.x + dx,
       y: player.y,
@@ -245,6 +346,7 @@ class ExploreScene extends BaseScene {
       if (dx !== 0) moved = true;
     }
 
+    //vertical test
     let nextYRect = {
       x: player.x,
       y: player.y + dy,
@@ -274,9 +376,13 @@ class ExploreScene extends BaseScene {
     }
   }
 
+  /**
+   * Display method for cave scene / map / loot / enemies / UI / text
+   */
   display() {
     background(0);
   
+    //translated camera block start
     push();
     translate(- cameraX, - cameraY);
 
@@ -292,8 +398,9 @@ class ExploreScene extends BaseScene {
 
     player.display();
     
-    pop();
+    pop(); //end
 
+    //UI after world rendering
     gameUI.drawPlayerPanel(player);
 
     if (!this.allLootCollected()) {
@@ -311,6 +418,9 @@ class ExploreScene extends BaseScene {
     }
   }
 
+  /**
+   * Loot collection check
+   */
   allLootCollected() {
     for(let loot of this.lootItems) {
       if (!loot.collected) {
@@ -320,10 +430,17 @@ class ExploreScene extends BaseScene {
     return true;
   }
 
+  /**
+   * Player exit check
+   * @returns 
+   */
   playerAtExit() {
     return rectCollision(player, this.exitZone);
   }
 
+  /**
+   * Respawn if fallen
+   */
   respawnPlayer() {
     player.takeDamage(20);
     player.x = 450;
@@ -338,6 +455,10 @@ class ExploreScene extends BaseScene {
     cameraY = 0;
   }
 
+  /**
+   * Keyboard input for scene - developer shortcut
+   * @param {string} key - key pressed
+   */
   handleKeyPressed(key) {
     if ((key === "n" || key === "N")) {
       sceneManager.changeScene("hub");
@@ -345,7 +466,15 @@ class ExploreScene extends BaseScene {
   }
 }
 
+/**
+ * Class for hub location 2
+ * 
+ * Handles NPC interaction / scene progression / resource collection
+ */
 class HubScene extends BaseScene {
+  /**
+   * Create the scene with properties
+   */
   constructor() {
     super("hub");
     this.worldWidth = 1980;
@@ -359,8 +488,11 @@ class HubScene extends BaseScene {
     this.inDialogue = false;
   }
 
+  /**
+   * Activate scene - initialise objects
+   */
   enter () {
-    player.x = 100;
+    player.x = 100; //start pos
     player.y = 500;
 
     this.npcs = [
@@ -395,6 +527,9 @@ class HubScene extends BaseScene {
     ];
   }
 
+  /**
+   * Update camera movement
+   */
   updateCamera() {
     cameraX = player.x - width / 2;
     cameraY = player.y - height / 2;
@@ -403,6 +538,9 @@ class HubScene extends BaseScene {
     cameraY = constrain(cameraY, 0, this.worldHeight - height);
   }
 
+  /**
+   * Player movement with collision checks (used across game)
+   */
   movePlayerWithCollisions() {
     let dx = 0;
     let dy = 0;
@@ -476,6 +614,9 @@ class HubScene extends BaseScene {
     }
   }
 
+  /**
+   * Check proximity to NPC for interaction
+   */
   npcProximityTest() {
     for (let npc of this.npcs) {
       let d = dist(player.x, player.y, npc.x, npc.y);
@@ -486,13 +627,16 @@ class HubScene extends BaseScene {
     return null;
   }
 
+  /**
+   * Update frames - player movement / camera / animations
+   */
   update() {
     if (!this.inDialogue){
       this.movePlayerWithCollisions();
       this.updateCamera();
     }
 
-    for(let npc of this.npcs) {
+    for(let npc of this.npcs) { //shorthand yay
       npc.update();
     }
 
@@ -501,9 +645,13 @@ class HubScene extends BaseScene {
     }
   }
 
+  /**
+   * Display method for village
+   */
   display() {
     background(0);
 
+    //translate world block start
     push();
     translate(-cameraX, -cameraY);
 
@@ -519,10 +667,11 @@ class HubScene extends BaseScene {
 
     player.display();
     
-    pop();
+    pop();//end
 
     gameUI.drawPlayerPanel(player);
     
+    //Interaction prompt if not already in dialogue
     let nearbyNPC = this.npcProximityTest();
 
     if (!this.inDialogue && nearbyNPC) {
@@ -537,25 +686,32 @@ class HubScene extends BaseScene {
     }
   }
 
+  /**
+   * Keyboard input for NPC interaction
+   * @param {string} key - key pressed
+   * @returns 
+   */
   handleKeyPressed(key) {
     if (key === "n" || key === "N") {
-      sceneManager.changeScene("weaponCutscene");
+      sceneManager.changeScene("weaponCutscene"); //developer shortcut
     }
 
+    //active dialogue
     if (this.inDialogue) {
       if (key === " ") {
-        if(!this.dialogueBox.isLineFinished()) {
+        if(!this.dialogueBox.isLineFinished()) {//finish line first
           this.dialogueBox.finishLine();
         } else { 
           this.dialogueBox.nextLine();
 
-          if (this.dialogueBox.outOfLines) {
+          if (this.dialogueBox.outOfLines) {//end convo
             let finishedNPC = this.activeNpc;
 
             this.inDialogue = false;
             this.activeNpc = null;
             this.dialogueBox = null;
 
+            //progression trigger
             if (finishedNPC && finishedNPC.dialogueId === "Blacksmith") {
               gameManager.hasWeapon = true;
               sceneManager.changeScene("weaponCutscene");
@@ -578,16 +734,29 @@ class HubScene extends BaseScene {
   }
 }
 
+/**
+ * Final battle scene logic
+ * 
+ * Replace top-down movement / control characters / damage checks / game conditions / UI
+ */
 class BattleScene extends BaseScene {
+  /**
+   * Create scene and set floor / spawn points
+   */
   constructor() {
     super("battle");
     this.groundY = 490;
-    this.playerStartX = 150;
+    this.playerStartX = 150;//spawn point
     this.playerStartY = 0;
     this.bossStartX = 800;
     this.bossStartY = 0;
   }
 
+  /**
+   * Activate scene
+   * 
+   * Create characters at ground level
+   */
   enter() {
     this.battlePlayer = new BattlePlayer(this.playerStartX, 0);
     this.battlePlayer.y = this.groundY - this.battlePlayer.h;
@@ -597,6 +766,12 @@ class BattleScene extends BaseScene {
     this.boss.y = this.groundY - this.boss.h;
   }
 
+  /**
+   * Update scenes
+   * 
+   * Handles character updates / combat collision / damage / death / scene progresion
+   * @returns 
+   */
   update() {
     // Always update both so death animations can continue
     this.battlePlayer.update(this.groundY);
@@ -653,6 +828,9 @@ class BattleScene extends BaseScene {
     }
   }
 
+  /**
+   * Display method for scene / characters / UI
+   */
   display() {
     background(0);
 
@@ -662,12 +840,15 @@ class BattleScene extends BaseScene {
 
     this.battlePlayer.display();
     this.boss.display();
+
     gameUI.drawPlayerPanel(this.battlePlayer);
     gameUI.drawBossPanel(this.boss);
   }
 
-  
-
+/**
+ * Keyboard input during scene
+ * @param {string} key - key pressed
+ */
   handleKeyPressed(key) {
     if (key === " ") {
       this.battlePlayer.jump();
@@ -678,7 +859,7 @@ class BattleScene extends BaseScene {
     }
 
     if (key === "n" || key === "N") {
-      sceneManager.changeScene("winner");
+      sceneManager.changeScene("winner");//developer shortcut
     }
   }
 }

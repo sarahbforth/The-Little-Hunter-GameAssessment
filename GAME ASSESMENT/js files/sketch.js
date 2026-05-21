@@ -1,3 +1,6 @@
+/**
+ * Preload game assets and data
+ */
 function preload() {
   dialogueFont = loadFont("assets/Jersey10-Regular.ttf");
 
@@ -38,6 +41,9 @@ function preload() {
   winner = loadImage("assets/Winner!.png");
 }  
 
+/**
+ * Initialise scene structure and game manegement
+ */
 function setup() {
   createCanvas(960, 540);
   textFont(dialogueFont);
@@ -123,6 +129,7 @@ function setup() {
 
   sceneManager.forceSceneChange("title");
 
+  //animation loops to fill correct arrays
   let frameData = spriteData.frames;
     for (let i = 0; i < frameData.length; i++) {
       let frame = frameData[i];
@@ -256,16 +263,25 @@ function setup() {
   
 }
 
+/**
+ * Display method
+ */
 function draw() {
   background(0);
   sceneManager.update();
   sceneManager.display();
 }
 
+/**
+ * Key pressed function
+ */
 function keyPressed() {
   sceneManager.handleKeyPressed(key);
 }
 
+/**
+ * Mouse pressed function
+ */
 function mousePressed() {
   sceneManager.handleMousePressed();
 }

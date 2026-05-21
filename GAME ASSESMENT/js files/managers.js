@@ -1,26 +1,47 @@
+/**
+ * SceneManager controls which scene is currently active.
+ * Handles smooth transition using fade
+ * 
+ * Stores scenes / switching / active scene / display / transitions
+ */
 class SceneManager {
+  /**
+   * Scene storage / tracking / fade variables
+   */
   constructor() {
-    this.scenes = {};
+    this.scenes = {}; //stores all scenes by name
+
     this.currentScene = null;
     this.currentSceneName = "";
 
-    this.isTransitioning = false;
+    this.isTransitioning = false; //transition state
     this.fadeAlpha = 0;
     this.fadeSpeed = 15;
     this.transitionPhase = "none"; // "fadeOut", "fadeIn", "none"
     this.nextSceneName = null;
   }
 
+  /**
+   * Add scene to the manager
+   * @param {string} name - name of scene
+   * @param {Object} scene - scene to store
+   */
   addScene(name, scene) {
     this.scenes[name] = scene;
   }
 
+  /**
+   * Fade transition
+   * @param {string} name - next scene
+   */
   changeScene(name) {
+    //can't switch if it doesnt exist
     if (!this.scenes[name]) {
       console.error(`Scene "${name}" does not exist.`);
       return;
     }
 
+    //no repeats or false starts
     if (this.currentSceneName === name || this.isTransitioning) {
       return;
     }
@@ -29,7 +50,11 @@ class SceneManager {
     this.isTransitioning = true;
     this.transitionPhase = "fadeOut";
   }
-
+ /**
+  * Immediate switch with no fade (developer shortcut mostly)
+  * @param {string} name - next target scene
+  * @returns 
+  */
   forceSceneChange(name) {
     if (!this.scenes[name]) {
       console.error(`Scene "${name}" does not exist.`);
@@ -40,11 +65,15 @@ class SceneManager {
       this.currentScene.exit();
     }
 
+    //set new scene
     this.currentScene = this.scenes[name];
     this.currentSceneName = name;
     this.currentScene.enter();
   }
 
+  /**
+   * update frames and transition
+   */
   update() {
     if (this.currentScene) {
       this.currentScene.update();
@@ -52,7 +81,9 @@ class SceneManager {
 
     this.updateFade();
   }
-
+ /**
+  * Display method and fade overlay
+  */
   display() {
     if (this.currentScene) {
       this.currentScene.display();
@@ -61,18 +92,31 @@ class SceneManager {
     this.drawFade();
   }
 
+  /**
+   * Keyboard input for current scene
+   * @param {string} key - key pressed
+   */
   handleKeyPressed(key) {
     if (this.currentScene && !this.isTransitioning) {
       this.currentScene.handleKeyPressed(key);
     }
   }
 
+  /**
+   * Mouse input for current scene
+   */
   handleMousePressed() {
     if (this.currentScene && !this.isTransitioning) {
       this.currentScene.handleMousePressed();
     }
   }
 
+  /**
+   * Update fade effect
+   * 
+   * fadeOut - slowly to black
+   * fadeIn - screen to normal
+   */
   updateFade() {
     if (!this.isTransitioning) return;
 
@@ -96,6 +140,9 @@ class SceneManager {
     }
   }
 
+  /**
+   * Black screen rectangle for fade effect
+   */
   drawFade() {
     if (this.fadeAlpha > 0) {
       push();
@@ -107,7 +154,13 @@ class SceneManager {
   }
 }
 
+/**
+ * Stores game progression and conditions
+ */
 class GameManager {
+  /**
+   * Default game state
+   */
   constructor() {
     this.runNumber = 1;
     this.questActive = false;
@@ -117,6 +170,9 @@ class GameManager {
     this.hasWeapon = false;
   }
 
+  /**
+   * Resets for a new run
+   */
   resetRun() {
     this.questActive = false;
     this.questComplete = false;
